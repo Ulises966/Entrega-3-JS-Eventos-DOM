@@ -45,3 +45,65 @@ const pizzas = [
     imagen: "./img/anana.png",
   },
 ];
+
+
+
+
+const pizzaForm = document.getElementById('pizza-form')
+const input = document.getElementById('input')
+const container = document.getElementById('container-card')
+const button = document.getElementById('btn')
+const mensageError = document.getElementById('mensageError')
+
+
+
+const pizza = JSON.parse(localStorage.getItem('pizza')) || [];
+const saveLocalStorage = (pizza) => {
+  localStorage.setItem('pizza', JSON.stringify(pizza));
+}
+
+const mostrarPizza = (pizza) => {
+  return `
+  <div class="pizza-card">
+      <h2>${pizza.nombre}</h2>
+      <p>Precio: $${pizza.precio}</p>
+      <img src="${pizza.imagen}" alt="${pizza.nombre}">
+  </div>
+`
+}
+
+
+
+const capturarId = (e) => {
+  e.preventDefault();
+  const value = input.value;
+  const pizza = pizzas.find(e => Number(e.id) === Number(value));
+  
+  if (!pizza) {
+    mensageError.textContent = 'No existe en el menu'
+    container.innerHTML = '';
+    localStorage.removeItem('pizza');
+  }
+
+  container.innerHTML = mostrarPizza(pizza);
+  mensageError.textContent = '';
+  saveLocalStorage(pizza);
+  
+}
+
+const pizzaEnlocal = () => {
+    container.innerHTML = mostrarPizza(pizza);
+}
+
+
+const init = () => {
+  document.addEventListener('DOMContentLoaded', pizzaEnlocal);
+  button.addEventListener('click', capturarId);
+}
+ 
+init()
+
+
+
+
+
